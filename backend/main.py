@@ -79,16 +79,21 @@ async def lifespan(app: FastAPI):
     """Initialize database and knowledge base on startup."""
     print("[*] Initializing Multi-Agent Customer Support System...")
     
-    # Initialize database
-    db.init_db()
-    db.seed_customers()
-    db.seed_orders()
+    try:
+        # Initialize database
+        db.init_db()
+        db.seed_customers()
+        db.seed_orders()
+        print("[+] Database initialized")
+    except Exception as e:
+        print(f"[!] Database initialization error: {e}")
     
-    # Initialize ChromaDB knowledge base
-    kb.seed_knowledge_base()
-    
-    # Ensure users CSV exists
-    _ensure_csv()
+    try:
+        # Initialize ChromaDB knowledge base
+        kb.seed_knowledge_base()
+        print("[+] Knowledge base initialized")
+    except Exception as e:
+        print(f"[!] Knowledge base initialization error: {e}")
     
     print("[+] System ready!")
     yield
