@@ -78,23 +78,6 @@ def _find_user_by_email(email: str) -> Optional[dict]:
 async def lifespan(app: FastAPI):
     """Initialize database and knowledge base on startup."""
     print("[*] Initializing Multi-Agent Customer Support System...")
-    
-    try:
-        # Initialize database
-        db.init_db()
-        db.seed_customers()
-        db.seed_orders()
-        print("[+] Database initialized")
-    except Exception as e:
-        print(f"[!] Database initialization error: {e}")
-    
-    try:
-        # Initialize ChromaDB knowledge base
-        kb.seed_knowledge_base()
-        print("[+] Knowledge base initialized")
-    except Exception as e:
-        print(f"[!] Knowledge base initialization error: {e}")
-    
     print("[+] System ready!")
     yield
     print("[~] Shutting down...")
