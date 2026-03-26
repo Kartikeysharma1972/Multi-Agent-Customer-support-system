@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 
 // ─── Constants ───────────────────────────────
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8001';
+const API_BASE = process.env.REACT_APP_API_URL || 'https://multi-agent-support-backend.onrender.com';
 
 const AGENT_COLORS = {
   billing_agent:   { bg: '#ecfdf5', border: '#10b981', text: '#047857', label: 'Billing Agent',   icon: '💳' },

@@ -1,0 +1,45 @@
+services:
+  # Backend Service
+  - type: web
+    name: multi-agent-support-backend
+    env: python
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "cd backend && python main.py"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: REDIS_URL
+        value: redis://redis:6379
+      - key: DATABASE_URL
+        value: sqlite:///./support.db
+      - key: CHROMA_PERSIST_DIR
+        value: ./chroma_db
+      - key: EMBEDDING_MODEL
+        value: all-MiniLM-L6-v2
+      - key: LLM_MODEL
+        value: llama-3.3-70b-versatile
+    healthCheckPath: /health
+
+  # Redis Service
+  - type: pserv
+    name: redis
+    env: docker
+    plan: free
+    dockerfilePath: ./redis/Dockerfile
+    dockerContext: ./redis
+
+  # Frontend Service
+  - type: web
+    name: multi-agent-support-frontend
+    env: static
+    plan: free
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: ./frontend/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://multi-agent-support-backend.onrender.com
